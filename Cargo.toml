@@ -7,3 +7,10 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+
+# Serde for serialisation/deserialisation of TMTC packets
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Chrono for timestamps, with the serde feature for de/serialisation
+chrono = { version = "0.4", features = ["serde"] }
