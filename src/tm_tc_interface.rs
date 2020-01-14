@@ -21,7 +21,14 @@ use std::sync::atomic::{Ordering, AtomicBool};
 // ---------------------------------------------------------------------------
 
 // Trait for data that can be used in an AutoTmTc packet
-pub trait TmTcData: Serialize + DeserializeOwned {}
+pub trait TmTcData: Serialize + DeserializeOwned {
+
+    // Get the Type Id associated with this type of TM/TC - a unique string 
+    // identifying this type of data. Should be unique, generally follow the
+    // structure name.
+    fn type_id(&self) -> String;
+
+}
 
 // The structure of a TM or TC packet for sending to the AutonomyManager. 
 // Should be sent using JSON.
@@ -34,7 +41,7 @@ struct AutoTmTc {
     send_time_utc: Option<DateTime<Utc>>,
 
     // The typename of the data stored in this packet
-    data_type_name: String,
+    data_type_id: String,
 
     // The data to be sent as a UTF-8 string
     data: String
@@ -94,10 +101,8 @@ impl TmTcIfBackend {
         let mut backend = TmTcIfBackend {
             tc_queue: vec![],
             tc_rx: chan_tc_rx,
-
             tm_queue: vec![],
             tm_tx: chan_tm_tx,
-
             run: backround_run
         };
 
@@ -206,15 +211,17 @@ impl TmTcIf {
     pub fn add_pending_tc<T>(&mut self, data: T) -> Result<(), String> where 
         T: TmTcData {
         
+        // Parse the data to a JSON string
         let json_str = match serde_json::to_string(&data) {
             Ok(s) => s,
             Err(e) => return Err(format!("Failed to serialise data: {}", e))
         };
 
+        // Build the packet and send to the backend
         match self.tc_tx.send(AutoTmTc {
             frame_counter: None,
             send_time_utc: None,
-            data_type_name: std::any::type_name::<T>().to_string(),
+            data_type_id: data.type_id(),
             data: json_str
         }) {
             Ok(_) => Ok(()),

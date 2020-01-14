@@ -23,12 +23,16 @@ pub struct TcConstructor<'a> {
 
 impl<'a> TcConstructor<'a> {
 
+    // Instantiate a new `TcConstructor` - used to build and send TCs to the
+    // TmTcIf.
     pub fn new(tm_tc_if: &'a mut TmTcIf) -> Self {
         TcConstructor {
             tm_tc_if: tm_tc_if
         }
     }
 
+    // Take a piece of TC data, generally a `TcXxx` object, and send it to the
+    // interface. 
     pub fn build_and_send<T>(&mut self, data: T) -> Result<(), String> where
         T: TmTcData {
         
@@ -39,7 +43,6 @@ impl<'a> TcConstructor<'a> {
 // ---------------------------------------------------------------------------
 // TC TYPES
 // ---------------------------------------------------------------------------
-// Note all the `impl TmTcData for ...` statememts are at the bottom.
 
 // HEARTBEAT
 //
@@ -58,6 +61,12 @@ impl TcHeartbeat {
     }
 }
 
+impl TmTcData for TcHeartbeat {
+    fn type_id(&self) -> String {
+        String::from("TcHeartbeat")
+    }
+}
+
 // DISCONNECT
 //
 // Instructs the rover to disconnect from the control GUI
@@ -71,7 +80,8 @@ impl TcDisconnect {
     }
 }
 
-// Impl statements
-
-impl TmTcData for TcHeartbeat {}
-impl TmTcData for TcDisconnect {}
+impl TmTcData for TcDisconnect {
+    fn type_id(&self) -> String {
+        String::from("TcDisconnect")
+    }
+}
