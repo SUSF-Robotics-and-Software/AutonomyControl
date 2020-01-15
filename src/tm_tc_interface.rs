@@ -15,13 +15,14 @@ use chrono::{DateTime, Utc};
 use std::thread;
 use std::sync::{Arc, mpsc::{channel, Receiver, Sender, TryRecvError}};
 use std::sync::atomic::{Ordering, AtomicBool};
+use std::fmt::Debug;
 
 // ---------------------------------------------------------------------------
 // AUTOTMTC PACKET
 // ---------------------------------------------------------------------------
 
 // Trait for data that can be used in an AutoTmTc packet
-pub trait TmTcData: Serialize + DeserializeOwned {
+pub trait TmTcData: Serialize + DeserializeOwned + Debug {
 
     // Get the Type Id associated with this type of TM/TC - a unique string 
     // identifying this type of data. Should be unique, generally follow the

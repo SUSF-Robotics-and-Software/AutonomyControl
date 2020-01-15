@@ -21,6 +21,13 @@ fn main() {
     // Build a heartbeat command
     tc_cstr.build_and_send(TcHeartbeat::new()).unwrap();
 
+    // Try and read some TM data (shouldn't be any)
+    match tm_tc_if.get_pending_tm::<TcDisconnect>()  {
+        Ok(Some(d)) => println!("Got some TM: {:?}", d),
+        Ok(None) => println!("Couldn't get any TM data"),
+        Err(e) => eprintln!("{}", e)
+    }
+
     // Wait for a while to see if the heartbeat got sent
     thread::sleep_ms(500);
 
