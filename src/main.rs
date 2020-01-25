@@ -4,6 +4,8 @@ use std::thread;
 mod tm_tc_interface;
 mod tc_constructor;
 mod tm_deconstructor;
+mod gui;
+mod virtspace;
 
 use tm_tc_interface::TmTcIf;
 use tc_constructor::*;
@@ -33,4 +35,7 @@ fn main() {
 
     // Stop the interface
     tm_tc_if.stop().unwrap();
+
+    gui::start();
+
 }

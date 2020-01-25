@@ -14,3 +14,11 @@ serde_json = "1.0"
 
 # Chrono for timestamps, with the serde feature for de/serialisation
 chrono = { version = "0.4", features = ["serde"] }
+
+# OrbTK for the GUI API - Note I'm using develop here because a lot has changed
+# since the latest build on crates.io
+orbtk = { git = "https://github.com/redox-os/orbtk", branch = "develop" }
+
+# euc for rendering the virtual space, with vek for matrix stuff
+euc = "0.4.3"
+vek = "0.9.9"

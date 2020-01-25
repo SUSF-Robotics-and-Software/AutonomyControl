@@ -1,0 +1,22 @@
+text-block {
+    font-size: 16;
+}
+
+.time {
+    font-size: 20;
+}
+
+.header {
+    font-size: 24;
+    color: #b3e5fc;
+    text-decoration: underline;
+}
+
+container {
+    border-radius: 1;
+    background: #ff0000;
+}
+
+virtspace {
+    background: #000000;
+}
