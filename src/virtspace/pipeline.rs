@@ -1,10 +1,9 @@
 use orbtk::prelude::*;
 use euc::{buffer::Buffer2d, rasterizer, Pipeline};
 use std::cell::Cell;
-use std::time::Instant;
 use vek::*;
 
-use crate::virtspace::{rgba_to_bgra_u32, objects::*, shaders::*};
+use crate::virtspace::{rgba_to_bgra_u32, objects::*};
 
 #[derive(Clone, Default, PartialEq, Pipeline)]
 pub struct VirtSpacePipeline {
@@ -13,8 +12,6 @@ pub struct VirtSpacePipeline {
 
 impl render::RenderPipeline for VirtSpacePipeline {
     fn draw(&self, render_target: &mut render::RenderTarget) {
-        let draw_start = Instant::now();
-
         let mut color = Buffer2d::new(
             [
                 render_target.width() as usize,
@@ -41,8 +38,6 @@ impl render::RenderPipeline for VirtSpacePipeline {
 
         let (world_grid_pos, order, zero_line) = WorldGrid::build((-1, 30), (-1, 15));
 
-        println!("Time WorldGrid::build() = {}", draw_start.elapsed().as_nanos());
-
         WorldGrid {
             mvp: &mvp,
             positions: &world_grid_pos,
@@ -50,8 +45,6 @@ impl render::RenderPipeline for VirtSpacePipeline {
         }
         .draw::<rasterizer::Lines<_>,_>(
             order.as_slice(), &mut color, &mut depth);
-
-        println!("Time WorldGrid.draw() = {}", draw_start.elapsed().as_nanos());
 
         // Rover Body
 

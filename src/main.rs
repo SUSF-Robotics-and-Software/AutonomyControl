@@ -1,5 +1,6 @@
 
 use std::thread;
+use std::time::Duration;
 
 mod tm_tc_interface;
 mod tc_constructor;
@@ -31,7 +32,7 @@ fn main() {
     }
 
     // Wait for a while to see if the heartbeat got sent
-    thread::sleep_ms(500);
+    thread::sleep(Duration::from_millis(500));
 
     // Stop the interface
     tm_tc_if.stop().unwrap();

@@ -2,8 +2,11 @@ pub mod objects;
 pub mod shaders;
 pub mod pipeline;
 
+pub use pipeline::VirtSpacePipeline;
+
 use vek::*;
 
+#[allow(dead_code)]
 pub fn vec4_array_as_f32_vec(vec4_arr: &[Vec4<f32>]) -> Vec<[f32; 4]> {
     let mut f32_vec: Vec<[f32; 4]> = Vec::with_capacity(vec4_arr.len());
 
