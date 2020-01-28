@@ -12,6 +12,16 @@ text-block {
     text-decoration: underline;
 }
 
+.abort {
+    background: #D50000;
+    color: white;
+}
+
+.send {
+    background: #2196F3;
+    color: white;
+}
+
 container {
     border-radius: 1;
     background: #ff0000;

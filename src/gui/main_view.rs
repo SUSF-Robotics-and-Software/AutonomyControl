@@ -22,10 +22,15 @@ fn get_theme() -> ThemeValue {
 // ORBTK MAIN WIDGET
 // ---------------------------------------------------------------------------
 
+const DEFAULT_WINDOW_WIDTH: f64 = 1600.0;
+const DEFAULT_WINDOW_HEIGHT: f64 = 900.0;
+
 widget!(
     MainView<GuiState> {
         current_time_text: String16,
-        render_pipeline: RenderPipeline
+        render_pipeline: RenderPipeline,
+        window_width: f64,
+        window_height: f64
     }
 );
 
@@ -37,14 +42,14 @@ impl Template for MainView {
                 Grid::create()
                     .columns(
                         Columns::create()
-                            .repeat(350.0, 2)
-                            .column(700.0)
+                            .repeat(450.0, 2)
+                            .column("stretch")
                             .build()
                     )
                     .rows(
                         Rows::create()
-                            .row(600.0)
-                            .row(200.0)
+                            .row("stretch")
+                            .row(300.0)
                             .build()
                     )
                     .child(Stack::create()
@@ -61,6 +66,45 @@ impl Template for MainView {
                             .selector(Selector::from("text-block")
                                 .class("header"))
                             .text("TM: Telemetry")
+                            .build(ctx))
+                        .build(ctx))
+                    .child(Grid::create()
+                        .columns(Columns::create()
+                            .column("auto")
+                            .column("stretch")
+                            .build())
+                        .rows(Rows::create()
+                            .row("auto")
+                            .row("stretch")
+                            .row("auto")
+                            .build())
+                        .attach(Grid::column(0))
+                        .attach(Grid::row(1))
+                        .attach(Grid::column_span(2))
+                        .child(TextBlock::create()
+                            .attach(Grid::column(0))
+                            .attach(Grid::row(0))
+                            .selector(Selector::from("text-block").class("header"))
+                            .margin((8.0, 8.0, 8.0, 8.0))
+                            .text("TC: Telecommand")
+                            .build(ctx))
+                        .child(Button::create()
+                            .selector(Selector::from("button").class("abort"))
+                            .attach(Grid::column(0))
+                            .attach(Grid::row(2))
+                            .margin((8.0, 8.0, 8.0, 8.0))
+                            .horizontal_alignment("start")
+                            .vertical_alignment("center")
+                            .text("Abort")
+                            .build(ctx))
+                        .child(Button::create()
+                            .selector(Selector::from("button").class("send"))
+                            .attach(Grid::column(1))
+                            .attach(Grid::row(2))
+                            .margin((8.0, 8.0, 8.0, 8.0))
+                            .horizontal_alignment("end")
+                            .vertical_alignment("center")
+                            .text("Send")
                             .build(ctx))
                         .build(ctx))
                     .child(Canvas::create()
@@ -80,7 +124,8 @@ pub fn start() {
             Window::create()
                 .title("AutonomyControl")
                 .position((200.0, 200.0))
-                .size(1400.0, 800.0)
+                .size(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT)
+                .resizeable(true)
                 .theme(get_theme())
                 .child(MainView::create().build(ctx))
                 .build(ctx)
